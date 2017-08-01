@@ -1,0 +1,12 @@
+<resources>
+    <string name="app_name">Application Wizard</string>
+    <string name="title_activity_main">MainActivity</string>
+    <string name="app_tag">DeviceAdminDemo - Prashant Adesara</string>
+    <string name="app_description">
+        Disable the Force Stop and Uninstall button in Manage Application.
+    </string>
+    <string name="textDemo">Done</string>
+
+    <string name="device_description">Disable the Force Stop button using Device Policy Manager API</string>
+    <string name="device_admin_label">Device Admin</string>
+</resources>
