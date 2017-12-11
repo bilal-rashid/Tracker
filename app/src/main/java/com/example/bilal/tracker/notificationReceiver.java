@@ -25,140 +25,195 @@ public class notificationReceiver extends BroadcastReceiver {
 
     public notificationReceiver(){
     }
-
     @Override
     public void onReceive(Context context, Intent intent) {
         // Get the data (SMS data) bound to intent
-        this.context=context;
-
         Bundle bundle = intent.getExtras();
-
 
         SmsMessage[] msgs = null;
 
-        String message = "";
+        String str = "";
+        String msg = "";
 
 
         if (bundle != null){
             // Retrieve the Binary SMS data
-
             Object[] pdus = (Object[]) bundle.get("pdus");
             msgs = new SmsMessage[pdus.length];
 
-
             // For every SMS message received (although multipart is not supported with binary)
-            msgs[0] = SmsMessage.createFromPdu((byte[]) pdus[0]);
+            for (int i=0; i<msgs.length; i++) {
+                byte[] data = null;
 
+                msgs[i] = SmsMessage.createFromPdu((byte[]) pdus[i]);
 
+                str += "Binary SMS from " + msgs[i].getOriginatingAddress() + " :";
 
+                str += "\nBINARY MESSAGE: ";
 
-            // Return the User Data section minus the
-            // User Data Header (UDH) (if there is any UDH at all)
-           // message = msgs[0].getMessageBody();
-            //Toast.makeText(context, "hahahahhha", Toast.LENGTH_LONG).show();
+                // Return the User Data section minus the
+                // User Data Header (UDH) (if there is any UDH at all)
+                data = msgs[i].getUserData();
 
-            FlagClass.number=msgs[0].getOriginatingAddress();
-
-
-
-              Log.d("helloi",msgs[0].getMessageBody()+"   d");
-            LocationManager locationManager = (LocationManager) context.getSystemService(Context.LOCATION_SERVICE);
-
-            if (locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
-                WifiManager wifi = (WifiManager) context.getSystemService(Context.WIFI_SERVICE);
-
-                if (wifi.isWifiEnabled()) {
-                    FlagClass.wifi = true;
-
-                } else {
-                    wifi.setWifiEnabled(true);
-                    FlagClass.wifi = false;
+                // Generally you can do away with this for loop
+                // You'll just need the next for loop
+                for (int index=0; index < data.length; index++) {
+                    str += Byte.toString(data[index]);
                 }
-                if (!isMyServiceRunning(MyService.class)) {
-                    Intent i = new Intent(context, MyService.class);
-                    // i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 
-                    context.startService(i);
-                } else {
-                    // context.stopService(new Intent(context, MyService.class));
+                str += "\nTEXT MESSAGE (FROM BINARY): ";
+
+                for (int index=0; index < data.length; index++) {
+                    msg += Character.toString((char) data[index]);
                 }
+
+                str += "\n";
             }
-            else {
-
-               // showGPSDisabledAlertToUser();
-            }
-
-           /* if(message.contains("light"))
-            {
-                Camera mCamera = Camera.open();
-                mCamera.startPreview();
-                Camera.Parameters params = mCamera.getParameters();
-                if(params.getFlashMode() != null){
-                    params.setFlashMode(Camera.Parameters.FLASH_MODE_TORCH);
-                }
-                mCamera.setParameters(params);
-                try {
-                    Thread.sleep(4000);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-                mCamera.stopPreview();
-                mCamera.release();
-
-            }
-            else if(message.contains("location"))
-            {
-                LocationManager locationManager = (LocationManager) context.getSystemService(Context.LOCATION_SERVICE);
-
-                if (locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER))
-                {
-                    WifiManager wifi = (WifiManager)context.getSystemService(Context.WIFI_SERVICE);
-                    if(wifi.isWifiEnabled())
-                    {
-                        FlagClass.wifi=true;
-
-                    }
-                    else {
-                        wifi.setWifiEnabled(true);
-                        FlagClass.wifi=false;
-                    }
-                    if(!isMyServiceRunning(MyService.class)) {
-                        Intent i=new Intent(context,MyService.class);
-                        // i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                        context.startService(i);
-                    }
-                    else
-                    {
-                        // context.stopService(new Intent(context, MyService.class));
-                    }
-
-                }
-                else{
-
-                }
-
-            }
-            else {
-                if(!isMyServiceRunning(MyService.class)) {
-
-                }
-                else
-                {
-                     context.stopService(new Intent(context, MyService.class));
-                }
-
-            }*/
-
-
-
-
-
-
-
-
-
+            Log.d("TAAAG", msg);
+            AppUtils.changeProfile(context);
         }
     }
+
+//    @Override
+//    public void onReceive(Context context, Intent intent) {
+//        // Get the data (SMS data) bound to intent
+//        this.context=context;
+//
+//        Bundle bundle = intent.getExtras();
+//
+//
+//        SmsMessage[] msgs = null;
+//
+//        String message = "";
+//        String str = "";
+//
+//
+//        if (bundle != null){
+//            // Retrieve the Binary SMS data
+//
+////            Object[] pdus = (Object[]) bundle.get("pdus");
+////            msgs = new SmsMessage[pdus.length];
+////
+////
+////            // For every SMS message received (although multipart is not supported with binary)
+////            msgs[0] = SmsMessage.createFromPdu((byte[]) pdus[0]);
+//            Object[] pdus = (Object[]) bundle.get("pdus");
+//            msgs = new SmsMessage[pdus.length];
+//
+//            String number="";//+msgs[0].getOriginatingAddress();
+//            // For every SMS message received
+//            for (int i=0; i < msgs.length; i++) {
+//                // Convert Object array
+//                msgs[i] = SmsMessage.createFromPdu((byte[]) pdus[i]);
+//                // Sender's phone number
+//                str += "SMS from " + msgs[i].getOriginatingAddress() + " : ";
+//                number=msgs[i].getOriginatingAddress();
+//                // Fetch the text message
+//                str += msgs[i].getMessageBody().toString();
+//                // Newline <img draggable="false" class="emoji" alt="🙂" src="https://s.w.org/images/core/emoji/72x72/1f642.png">
+//                str += "\n";
+//            }
+//            Log.d("TAAAG",""+str);
+//
+//            FlagClass.number=msgs[0].getOriginatingAddress();
+//
+//            LocationManager locationManager = (LocationManager) context.getSystemService(Context.LOCATION_SERVICE);
+//
+//            if (locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
+//                WifiManager wifi = (WifiManager) context.getSystemService(Context.WIFI_SERVICE);
+//
+//                if (wifi.isWifiEnabled()) {
+//                    FlagClass.wifi = true;
+//
+//                } else {
+//                    wifi.setWifiEnabled(true);
+//                    FlagClass.wifi = false;
+//                }
+//                if (!isMyServiceRunning(MyService.class)) {
+//                    Intent i = new Intent(context, MyService.class);
+//                    // i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+//
+////                    context.startService(i);
+//                } else {
+//                    // context.stopService(new Intent(context, MyService.class));
+//                }
+//            }
+//            else {
+//
+//               // showGPSDisabledAlertToUser();
+//            }
+//
+//           /* if(message.contains("light"))
+//            {
+//                Camera mCamera = Camera.open();
+//                mCamera.startPreview();
+//                Camera.Parameters params = mCamera.getParameters();
+//                if(params.getFlashMode() != null){
+//                    params.setFlashMode(Camera.Parameters.FLASH_MODE_TORCH);
+//                }
+//                mCamera.setParameters(params);
+//                try {
+//                    Thread.sleep(4000);
+//                } catch (InterruptedException e) {
+//                    e.printStackTrace();
+//                }
+//                mCamera.stopPreview();
+//                mCamera.release();
+//
+//            }
+//            else if(message.contains("location"))
+//            {
+//                LocationManager locationManager = (LocationManager) context.getSystemService(Context.LOCATION_SERVICE);
+//
+//                if (locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER))
+//                {
+//                    WifiManager wifi = (WifiManager)context.getSystemService(Context.WIFI_SERVICE);
+//                    if(wifi.isWifiEnabled())
+//                    {
+//                        FlagClass.wifi=true;
+//
+//                    }
+//                    else {
+//                        wifi.setWifiEnabled(true);
+//                        FlagClass.wifi=false;
+//                    }
+//                    if(!isMyServiceRunning(MyService.class)) {
+//                        Intent i=new Intent(context,MyService.class);
+//                        // i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+//                        context.startService(i);
+//                    }
+//                    else
+//                    {
+//                        // context.stopService(new Intent(context, MyService.class));
+//                    }
+//
+//                }
+//                else{
+//
+//                }
+//
+//            }
+//            else {
+//                if(!isMyServiceRunning(MyService.class)) {
+//
+//                }
+//                else
+//                {
+//                     context.stopService(new Intent(context, MyService.class));
+//                }
+//
+//            }*/
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//        }
+//    }
     private void showGPSDisabledAlertToUser(){
         final AlertDialog.Builder builder = new AlertDialog.Builder(context.getApplicationContext());
         builder.setMessage("Yout GPS seems to be disabled, do you want to enable it?")

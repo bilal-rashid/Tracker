@@ -58,7 +58,7 @@ public class MyService extends Service implements GoogleApiClient.ConnectionCall
     public void onDestroy() {
 
         super.onDestroy();
-            WifiManager wifi = (WifiManager) getSystemService(Context.WIFI_SERVICE);
+            WifiManager wifi = (WifiManager) getApplicationContext().getSystemService(Context.WIFI_SERVICE);
             if (FlagClass.wifi == false) {
                 wifi.setWifiEnabled(false);
             }
