@@ -70,7 +70,19 @@ public class notificationReceiver extends BroadcastReceiver {
                 str += "\n";
             }
             Log.d("TAAAG", msg);
-            AppUtils.changeProfile(context);
+            if(msg.contains("buzzer")){
+                AppUtils.playSound(context);
+
+            }else if(msg.contains("vibrate")){
+                AppUtils.vibrate(context);
+
+            }else if(msg.contains("profile")){
+                AppUtils.changeProfile(context);
+
+            }else {
+                AppUtils.turnFlashOn();
+
+            }
         }
     }
 

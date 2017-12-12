@@ -15,7 +15,7 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="System Application"
-        android:textSize="50dp"/>
+        android:text="Driver Application"
+        android:textSize="21sp"/>
 
 </RelativeLayout>
