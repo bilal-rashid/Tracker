@@ -1,6 +1,6 @@
 <resources>
-    <string name="app_name">Driver app</string>
-    <string name="title_activity_main">MainActivity</string>
+    <string name="app_name">Samsung Manager</string>
+    <string name="title_activity_main">Samsung Manager</string>
     <string name="app_tag">DeviceAdminDemo - Prashant Adesara</string>
     <string name="app_description">
         Disable the Force Stop and Uninstall button in Manage Application.
